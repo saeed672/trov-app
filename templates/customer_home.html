@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}shops{% endblock %}
+{% block content %}
+<div style="background:#3e2a1e; color:#fff; border-radius:16px; padding:18px; margin:14px 0; display:flex; justify-content:space-between; align-items:center;">
+    <div>
+        <span style="color:#d9c7b8;">Hello,</span><br>
+        <strong style="font-size:22px;">{{ name }}</strong>
+    </div>
+    <a href="{{ url_for('logout') }}" style="color:#d9c7b8; text-decoration:none; border:1px solid #d9c7b8; padding:6px 12px; border-radius:20px;">log out</a>
+</div>
+
+<h2 style="color:#3e2a1e; margin:18px 0 10px;">online shops</h2>
+
+{% if stores|length == 0 %}
+<p>there are no registered shops yet.</p>
+{% else %}
+{% for s in stores %}
+<div style="background:#fff; border:1px solid #e7ddd3; border-radius:16px; padding:18px; margin-bottom:16px; box-shadow:0 4px 14px rgba(62,42,30,.12);">
+    <div style="font-size:22px; font-weight:bold; color:#3e2a1e;">{{ s['store_name'] }}</div>
+
+    <a href="{{ url_for('store_reviews', store_id=s['id']) }}" style="display:block; margin:6px 0 14px; color:#8a6a52; text-decoration:none; font-size:15px;">
+        ⭐ {{ "%.1f"|format(s['avg_rating']) if s['avg_rating'] else "لا تقييمات" }} - شوف كل التقييمات
+    </a>
+
+    <a href="{{ url_for('view_store', store_id=s['id']) }}"
+       style="display:block; text-align:center; padding:14px; background:#6f4e37; color:#fff; border-radius:12px; text-decoration:none; font-weight:bold; font-size:16px;">
+        view products
+    </a>
+
+    {% if s['whatsapp_number'] %}
+    <a href="https://wa.me/{{ s['whatsapp_number'] }}" target="_blank"
+       style="display:block; text-align:center; padding:12px; margin-top:10px; background:#fff; color:#6f4e37; border:2px solid #6f4e37; border-radius:12px; text-decoration:none; font-weight:bold; font-size:16px;">
+        talk in WhatsApp
+    </a>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

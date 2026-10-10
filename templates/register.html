@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} New account{% endblock %}
+{% block content %}
+    <h1>create anew account</h1>
+    <form method="post">
+        <input type="text" name="name" placeholder="your name" required>
+        <input type="email" name="email" placeholder="el email" required>
+        <input type="password" name="password" placeholder=" your password" required>
+
+        <select name="role" id="role" onchange="togglestorefields()" required>
+            <option value="">who are you</option>
+            <option value="customer">User</option>
+            <option value="store">shop owner</option>
+        </select>
+
+        <div id="store-fields" style="display: none;">
+            <input type="text" id="store_name" name="store_name" placeholder="shop name">
+            <input type="text" id="whatsapp_number" name="whatsapp_number" placeholder="(such as:201234567890) num. of whatsapp num.">
+        </div>
+
+        <button type="submit">create account</button>
+    </form>
+    <p>Do you have an account?<a href="{{ url_for('login') }}"> Log in</a></p>
+
+    <script>
+        function togglestorefields() {
+            const isStore = document.getElementById('role').value === 'store';
+            document.getElementById('store-fields').style.display = isStore ? 'block' : 'none';
+            document.getElementById('store_name').required = isStore;
+            document.getElementById('whatsapp_number').required = isStore;
+        }
+    </script>
+{% endblock %}

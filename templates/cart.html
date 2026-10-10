@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}السلة{% endblock %}
+{% block content %}
+    <h1>السلة</h1>
+    {% for item in items %}
+    <div class="store-card">
+        <div>
+            <strong>{{ item.product['name'] }}</strong><br>
+            <small>{{ item.quantity }} × {{ item.product['price'] }} EGP</small>
+        </div>
+    </div>
+    {% endfor %}
+    <form method="post">
+        <input type="text" name="phone" placeholder="رقم تليفونك" required>
+        <input type="text" name="address" placeholder="العنوان بالتفصيل" required>
+        <button type="submit">تأكيد الطلب</button>
+    </form>
+{% endblock %}

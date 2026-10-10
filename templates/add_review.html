@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}review{% endblock %}
+{% block content %}
+    <h1>rate: {{ product['name'] }}</h1>
+    <form method="post">
+        <select name="rating" required>
+            <option value="5">5 - excellent</option>
+            <option value="4">4 - good</option>
+            <option value="3">3 - okay</option>
+            <option value="2">2 - bad</option>
+            <option value="1">1 - very bad</option>
+        </select>
+        <input type="text" name="comment" placeholder="write a comment (optional)">
+        <button type="submit">submit review</button>
+    </form>
+{% endblock %}

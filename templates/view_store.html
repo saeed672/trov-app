@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ store['store_name'] }}{% endblock %}
+{% block content %}
+<h1>{{ store.store_name }}</h1>
+
+<p>
+{% if store.delivery_available %}🛵 الدليفري متاح{% else %}❌ الدليفري غير متاح، استلام من المحل فقط{% endif %}
+</p>
+
+<div class="top-bar">
+  <details>
+    <summary style="cursor:pointer; font-weight:bold; padding:10px; background:#f0f2f5; border-radius:8px;">available products</summary>
+    <div style="margin-top:10px;">
+      {% if categories|length == 0 %}
+        <p>no products added yet</p>
+      {% else %}
+        {% for c in categories %}
+          <div class="store-card">
+            <strong>{{ c['category'] }}</strong>
+            <a href="{{ url_for('view_category', store_id=store['id'], category=c['category']) }}">دخول القسم</a>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </details>
+</div>
+
+<p><a href="{{ url_for('my_orders') }}">my orders</a></p>
+{% endblock %}

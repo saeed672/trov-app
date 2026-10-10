@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ category }}{% endblock %}
+{% block content %}
+    <div class="top-bar">
+        <h1>{{ category }}</h1>
+        <a class="logout-link" href="{{ url_for('view_store', store_id=store_id) }}">back to store</a>
+    </div>
+
+    {% if products|length == 0 %}
+        <p>no products in this category</p>
+    {% else %}
+        {% for p in products %}
+        <div class="store-card">
+            <div>
+                <strong>{{ p['name'] }}</strong><br>
+                <small>{{ p['price'] }} EGP - متاح {{ p['quantity'] }}</small>
+            </div>
+            <form method="post" action="{{ url_for('add_to_cart') }}">
+                <input type="hidden" name="product_id" value="{{ p['id'] }}">
+                <input type="hidden" name="store_id" value="{{ store_id }}">
+                <input type="hidden" name="category" value="{{ category }}">
+                <input type="number" name="quantity" min="1" max="{{ p['quantity'] }}" value="1" style="width: 60px;">
+                <button type="submit">add to cart</button>
+            </form>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <p><a href="{{ url_for('view_store', store_id=store_id) }}">تصفح قسم تاني</a> - <a href="{{ url_for('view_cart') }}">شوف السلة</a></p>
+{% endblock %}

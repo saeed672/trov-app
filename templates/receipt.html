@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}ريسيت{% endblock %}
+{% block content %}
+<div style="border:2px dashed #6f4e37; border-radius:14px; padding:18px;">
+    <h2 style="text-align:center; margin-top:0;">TROV · ريسيت موثق ✅</h2>
+    <p style="text-align:center; color:#8a6a52; margin-top:-8px;">رقم الريسيت: <strong>TROV-{{ '%06d'|format(o.ref) }}</strong></p>
+
+    <p>المحل: <strong>{{ o.store_name }}</strong><br>الزبون: {{ o.customer_name }}</p>
+
+    <table>
+        {% for it in o['items'] %}
+        <tr>
+            <td>{{ it.name }}</td>
+            <td>{{ '%.2f'|format(it.price) }} × {{ it.quantity }}</td>
+            <td>{{ '%.2f'|format(it.price * it.quantity) }} ج</td>
+        </tr>
+        {% endfor %}
+        <tr><th>الإجمالي</th><th></th><th>{{ '%.2f'|format(o.total) }} ج</th></tr>
+    </table>
+
+    <p style="color:#8a6a52; font-size:14px; margin-bottom:0;">
+        وقت الطلب: {{ o.created_at or '-' }}<br>
+        وقت التسليم الموثق بالكود: {{ o.delivered_at or '-' }}
+    </p>
+</div>
+<button onclick="window.print()" style="margin-top:12px;">طباعة / حفظ PDF</button>
+{% endblock %}

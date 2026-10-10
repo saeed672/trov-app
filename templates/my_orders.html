@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}طلباتي{% endblock %}
+{% block content %}
+{% set labels = {'pending':'⏳ في انتظار المحل','accepted':'👍 المحل قبل الطلب','delivered':'✅ تم التسليم','confirmed':'✅ تم التسليم','rejected':'❌ مرفوض'} %}
+<div class="top-bar">
+    <h1 style="font-size:28px;">طلباتي</h1>
+    <a class="logout-link" style="font-size:16px;" href="{{ url_for('customer_home') }}">⬅ المحلات</a>
+</div>
+
+{% for o in orders %}
+<div style="border:2px solid #e7ddd3; border-radius:18px; padding:20px; margin-bottom:20px; box-shadow:0 4px 14px rgba(62,42,30,.12);">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <strong style="font-size:22px;">{{ o.store_name }}</strong>
+        <span style="background:#f5efe9; padding:8px 14px; border-radius:20px; font-size:16px; font-weight:bold;">{{ labels.get(o.status, o.status) }}</span>
+    </div>
+    <div style="color:#8a6a52; font-size:15px; margin-bottom:8px;">طلب #{{ o.ref }}</div>
+
+    {% for it in o['items'] %}
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:20px; padding:12px 0; border-bottom:1px solid #efe6dd;">
+        <span>{{ it.name }} <strong>× {{ it.quantity }}</strong></span>
+        <span>{{ '%.2f'|format(it.price * it.quantity) }} ج</span>
+    </div>
+    {% if o.status in ('delivered','confirmed') %}
+    <div style="padding:8px 0;">
+        {% if it.order_id in reviewed %}<span style="font-size:16px;">✅ تم التقييم</span>
+        {% else %}<a href="{{ url_for('add_review', order_id=it.order_id) }}" style="font-size:18px; font-weight:bold;">⭐ قيّم {{ it.name }}</a>{% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <div style="display:flex; justify-content:space-between; font-size:24px; font-weight:bold; padding:14px 0;">
+        <span>الإجمالي</span>
+        <span>{{ '%.2f'|format(o.total) }} ج</span>
+    </div>
+
+    {% if o.status in ('pending','accepted') %}
+    <p style="margin:6px 0; font-size:16px;">كود التسليم (اديه للمحل <u>عند الاستلام فقط</u>):</p>
+    <div style="font-size:42px; letter-spacing:14px; text-align:center; background:#f5efe9; border-radius:14px; padding:16px; font-weight:bold;">{{ o.delivery_code }}</div>
+    {% elif o.status in ('delivered','confirmed') %}
+    <a href="{{ url_for('receipt', batch_id=o.batch_id) }}" style="display:block; text-align:center; padding:16px; margin-top:6px; border:2px solid #6f4e37; border-radius:12px; text-decoration:none; font-weight:bold; font-size:18px;">🧾 عرض الريسيت الإلكتروني</a>
+    {% endif %}
+</div>
+{% else %}
+<p style="font-size:18px;">لا توجد طلبات بعد</p>
+{% endfor %}
+{% endblock %}

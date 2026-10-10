@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}لوحة المحل{% endblock %}
+{% block content %}
+<div style="background:#3e2a1e; color:#fff; border-radius:16px; padding:18px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+    <div>
+        <span style="color:#d9c7b8;">Hello,</span><br>
+        <strong style="font-size:22px;">{{ name }}</strong>
+    </div>
+    <a href="{{ url_for('logout') }}" style="color:#d9c7b8; text-decoration:none; border:1px solid #d9c7b8; padding:6px 12px; border-radius:20px; font-size:14px;">log out</a>
+</div>
+
+<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+    <a href="{{ url_for('store_orders') }}" style="display:inline-block; padding:12px 20px; background:#6f4e37; color:#fff; border-radius:12px; text-decoration:none; font-weight:bold; font-size:17px;">🧾 عرض الطلبات</a>
+    <a href="{{ url_for('store_reviews', store_id=session['user_id']) }}" style="display:inline-block; padding:12px 20px; background:#fff; color:#6f4e37; border:2px solid #6f4e37; border-radius:12px; text-decoration:none; font-weight:bold; font-size:17px;">
+        {% if avg and avg['total'] %}⭐ {{ '%.1f'|format(avg['avg_rating']) }} ({{ avg['total'] }}) التقييمات{% else %}⭐ التقييمات{% endif %}
+    </a>
+</div>
+
+<form method="post" action="{{ url_for('toggle_delivery') }}">
+    {% if delivery %}الدليفري: متاح ✅{% else %}الدليفري: غير متاح ❌{% endif %}
+    <button>تغيير</button>
+</form>
+
+<form method="post">
+    <input type="text" name="product_name" placeholder="name of product" required>
+    <select name="category">
+        <option value="جبن">جبن</option>
+        <option value="مشروبات">مشروبات</option>
+        <option value="شيبسي وسناكس">شيبسي وسناكس</option>
+        <option value="ألبان">ألبان</option>
+        <option value="بقالة">بقالة</option>
+        <option value="مخبوزات">مخبوزات</option>
+        <option value="منظفات">منظفات</option>
+        <option value="أخرى">أخرى</option>
+    </select>
+    <input type="number" step="0.01" name="price" placeholder="price" required>
+    <input type="number" name="quantity" placeholder="available quantity" required>
+    <button type="submit">add</button>
+</form>
+
+<h2>your products</h2>
+<table>
+    <tr><th>products</th><th>price</th><th>quantity</th><th></th></tr>
+    {% for p in products %}
+    <tr>
+        <td>{{ p['name'] }}<br><small style="color:#8a6a52;">{{ p['category'] }}</small></td>
+        <td>{{ p['price'] }}</td>
+        <td>
+            {{ p['quantity'] }}
+            {% if p['quantity'] <= 3 %}<br><span class="low-stock">it's almost over - {{ p['quantity'] }}</span>{% endif %}
+        </td>
+        <td><a href="{{ url_for('delete_product', product_id=p['id']) }}" onclick="return confirm('تحذف المنتج؟')">remove</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

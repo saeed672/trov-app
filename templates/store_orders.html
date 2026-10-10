@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}الطلبات{% endblock %}
+{% block content %}
+{% set labels = {'pending':'⏳ في انتظار المحل','accepted':'👍 تم قبول الطلب','delivered':'✅ تم التسليم','confirmed':'✅ تم التسليم','rejected':'❌ مرفوض'} %}
+<div class="top-bar">
+    <h1 style="font-size:28px;">الطلبات</h1>
+    <a class="logout-link" style="font-size:16px;" href="{{ url_for('store_dashboard') }}">⬅ لوحة المحل</a>
+</div>
+
+{% for o in orders %}
+<div style="border:2px solid #e7ddd3; border-radius:18px; padding:20px; margin-bottom:20px; box-shadow:0 4px 14px rgba(62,42,30,.12);">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <strong style="font-size:22px;">طلب #{{ o.ref }}</strong>
+        <span style="background:#f5efe9; padding:8px 14px; border-radius:20px; font-size:16px; font-weight:bold;">{{ labels.get(o.status, o.status) }}</span>
+    </div>
+
+    <div style="background:#f5efe9; border-radius:12px; padding:14px; font-size:18px; line-height:1.9; margin-bottom:14px;">
+        👤 {{ o.customer_name }}<br>
+        📞 <a href="tel:{{ o.phone }}" style="color:#3e2a1e; font-weight:bold;">{{ o.phone }}</a><br>
+        📍 {{ o.address }}
+    </div>
+
+    {% for it in o['items'] %}
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:20px; padding:12px 0; border-bottom:1px solid #efe6dd;">
+        <span>{{ it.name }} <strong>× {{ it.quantity }}</strong></span>
+        <span>{{ '%.2f'|format(it.price * it.quantity) }} ج</span>
+    </div>
+    {% endfor %}
+
+    <div style="display:flex; justify-content:space-between; font-size:24px; font-weight:bold; padding:14px 0;">
+        <span>الإجمالي</span>
+        <span>{{ '%.2f'|format(o.total) }} ج</span>
+    </div>
+
+    {% if o.status == 'pending' %}
+    <div style="display:flex; gap:10px;">
+        <form method="post" action="{{ url_for('store_accept', batch_id=o.batch_id) }}" style="flex:2;"><button style="font-size:18px; padding:16px;">قبول الطلب</button></form>
+        <form method="post" action="{{ url_for('store_reject', batch_id=o.batch_id) }}" style="flex:1;"><button style="background:#c0392b; font-size:18px; padding:16px;">رفض</button></form>
+    </div>
+    {% elif o.status == 'accepted' %}
+    <form method="post" action="{{ url_for('store_deliver', batch_id=o.batch_id) }}">
+        <input name="code" inputmode="numeric" maxlength="4" placeholder="كود التسليم (4 أرقام من الزبون)" required style="font-size:20px; padding:16px; text-align:center;">
+        <button style="font-size:18px; padding:16px;">تأكيد التسليم</button>
+    </form>
+    <form method="post" action="{{ url_for('store_reject', batch_id=o.batch_id) }}"><button style="background:#c0392b; font-size:16px;">إلغاء الطلب</button></form>
+    {% elif o.status in ('delivered','confirmed') %}
+    <a href="{{ url_for('receipt', batch_id=o.batch_id) }}" style="display:block; text-align:center; padding:16px; border:2px solid #6f4e37; border-radius:12px; text-decoration:none; font-weight:bold; font-size:18px;">🧾 عرض الريسيت</a>
+    {% endif %}
+</div>
+{% else %}
+<p style="font-size:18px;">لا توجد طلبات بعد</p>
+{% endfor %}
+{% endblock %}

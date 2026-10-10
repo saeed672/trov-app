@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TROV APP | اطلب من محلات منطقتك وقيّم بشراء موثق</title>
+<meta name="description" content="TROV APP منصة للطلب من المحلات القريبة منك، مع ريسيت إلكتروني وتقييمات موثقة بشراء حقيقي.">
+<style>
+ body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f6f8;color:#222}
+ .hero{background:#111111;color:#fff;text-align:center;padding:48px 20px}
+ .hero h1{margin:0;font-size:42px;letter-spacing:3px}
+ .hero p{margin:10px 0 24px;font-size:18px}
+ .btn{display:inline-block;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold;margin:4px}
+ .btn.w{background:#fff;color:#111111}.btn.o{border:2px solid #fff;color:#fff}
+ main{max-width:720px;margin:0 auto;padding:20px}
+ .card{background:#fff;border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 1px 4px #0001}
+ .card h2{margin:0 0 8px;font-size:18px;color:#111111}
+ .card p,.card li{line-height:1.8;margin:0}
+ footer{text-align:center;color:#888;padding:20px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>TROV</h1>
+  <p>اطلب من محلات منطقتك، وقيّم بعد ما تستلم فعلاً</p>
+  <a class="btn w" href="{{ url_for('register') }}">إنشاء حساب</a>
+  <a class="btn o" href="{{ url_for('login') }}">تسجيل الدخول</a>
+</div>
+<main>
+  <div class="card">
+    <h2>إيه هو TROV؟</h2>
+    <p>منصة بتربطك بالمحلات والسوبر ماركت القريبة منك. بتطلب وتتواصل مع المحل على الواتساب، وبعد الاستلام بتاخد ريسيت إلكتروني موثق وتقدر تقيّم المنتج.</p>
+  </div>
+  <div class="card">
+    <h2>إزاي بيشتغل؟</h2>
+    <ol>
+      <li>اختار محل قريب منك وتصفح أقسامه.</li>
+      <li>اطلب، وخد كود تسليم تديه عند الاستلام.</li>
+      <li>استلم الطلب واحتفظ بالريسيت الإلكتروني.</li>
+      <li>قيّم المنتج، وتقييمك موثق بشراء حقيقي.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>لأصحاب المحلات</h2>
+    <p>استقبل طلبات منظمة من زباين منطقتك من غير عمولات كبيرة، وحدد بنفسك الدليفري متاح ولا لا.</p>
+  </div>
+</main>
+<footer>© TROV APP</footer>
+</body>
+</html>
